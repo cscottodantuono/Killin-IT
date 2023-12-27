@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <ETH.h>
-#include <PubSubClient.h>
-#include <TFT_eSPI.h>
+#include "PubSubClient.h"
+#include "TFT_eSPI.h"
 
 //#define MQTT_SERVER "10.1.10.181" // Uncomment for static IP CSD
 
