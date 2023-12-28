@@ -57,7 +57,8 @@ String Series = "E-STOP SYSTEM";
 int x = tft.width() / 2; // Center of the screen
 int y = tft.height() / 2; // Center of the screen
 
-void update_screen_state();
+void update_estop_state(enum estop_state_t estop_state);
+void update_screen_state(enum screen_state_t screen_state);
 
 void setup()
 {
