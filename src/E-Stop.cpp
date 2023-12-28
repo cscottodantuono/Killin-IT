@@ -145,6 +145,7 @@ void update_screen_state(enum screen_state_t screenState)
     {
         case SCREEN_STATE_INIT:
             tft.init();
+            //tft.setFreeFont(&FreeMono12pt7b);
             tft.fillScreen(TFT_BLACK);
             tft.setRotation(0);
             tft.setTextDatum(MC_DATUM);
