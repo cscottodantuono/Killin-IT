@@ -247,7 +247,7 @@ void loop()
         Serial.println("Connecting To:" MQTT_SERVER);
         client.setServer(MQTT_SERVER, mqtt_port);
     #else
-        if (isDefaultIPAddress(ETH.gatewayIP())) return;
+        if (isDefaultIPAddress(ETH.gatewayIP())) break;
         Serial.println("Connecting To:" + ETH.gatewayIP().toString());
         client.setServer(ETH.gatewayIP(), mqtt_port);
     #endif
@@ -264,6 +264,8 @@ void loop()
     {
         update_estop_state(ESTOP_STATE_CLEAR);
     }
+
+    if (!init) return;
 
     if (!client.connected())
     {
