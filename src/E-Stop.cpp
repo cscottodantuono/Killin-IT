@@ -45,7 +45,6 @@ PubSubClient client(ethClient);
 int lastButtonState = HIGH;
 bool messageSent = false;
 unsigned long lastMacSendTime = 0;
-enum screen_state_t screenState = SCREEN_STATE_INIT;
 
 // TFT Things
 TFT_eSPI tft = TFT_eSPI();
@@ -58,18 +57,17 @@ String Series = "E-STOP SYSTEM";
 int x = tft.width() / 2; // Center of the screen
 int y = tft.height() / 2; // Center of the screen
 
+void update_screen_state();
 
-void update_screen_state()
-;int y = tft.height() / 2; /
-void setup()mn()115200
+void setup()
 {
-    Screen.begi;
-    delay(1000);
+    Serial.begin(115200);
+    update_screen_state(SCREEN_STATE_INIT);
     ETH.begin();
-    pinMode(buttonPin, INPUT_PULL
+    pinMode(buttonPin, INPUT_PULLUP);
     pinMode(relayPin_1, OUTPUT);
     digitalWrite(relayPin_1, LOW);
-
+    update_screen_state(SCREEN_STATE_BOOT);
 }
 
 void update_estop_state(enum estop_state_t estop_state)
@@ -77,68 +75,58 @@ void update_estop_state(enum estop_state_t estop_state)
     static enum estop_state_t prev_estop_state;
     static bool prev_connection_state = false;
 
-    bool connection_state = client.connected;
+    bool connection_state = client.connected();
 
     /* Always use current state immediately for the actual relay control */
-    i        digitalWrite(relayPin_1, LOW);
-    if ()
-
-
-
-
-
-   
-    if (estop_state != prev_estop_state)
+    if (estop_state)
     {
-        i
+        digitalWrite(relayPin_1, HIGH);
+    }
+    else
+    {
+        digitalWrite(relayPin_1, LOW);
     }
 
-    if (estop != prev_estop_state || connection_state != prev_connection_state)
+    if (estop_state != prev_estop_state || connection_state != prev_connection_state)
     {
         /* If we aren't connected and we are E-Stopped */
-        if (!connection_state && estop)
+        if (!connection_state && estop_state)
         {
             update_screen_state(SCREEN_STATE_NOCONN_ACTIVE);
         }
         /* If we aren't connected and we are clear */
-        else if (!connection_state && !estop)
+        else if (!connection_state && !estop_state)
         {
             update_screen_state(SCREEN_STATE_NOCONN_CLEAR);
         }
         /* If we are connected and we are E-Stopped */
-        else if (estop == ESTOP
-            tft.init();_STATE_LOCAL)
+        else if (estop_state == ESTOP_STATE_LOCAL)
         {
             update_screen_state(SCREEN_STATE_ACTIVE);
         }
         /* If we are connected and we are remotely E-Stopped */
-        else if (estop == ESTOP_STATE_REMOTE)
+        else if (estop_state == ESTOP_STATE_REMOTE)
         {
             update_screen_state(SCREEN_STATE_STANDBY);
         }
         /* If we are connected and everything is clear */
-        else if (estop == ESTOP_STATE_CLEAR)
+        else if (estop_state == ESTOP_STATE_CLEAR)
         {
             update_screen_state(SCREEN_STATE_CLEAR);
         }
     }
-        }
 
-        switch ()
-
-        /* Only update screen state when something changes */
-        update_screen_state(estop);
-    }
-
-    prev_estop_state = estop;
+    prev_connection_state = connection_state;
+    prev_estop_state = estop_state;
 }
 
 /* Called when estop state changes, or when connection state changes */
-void update_screen_state()
+void update_screen_state(enum screen_state_t screenState)
 {
     switch (screenState)
     {
         case SCREEN_STATE_INIT:
+            tft.init();
             tft.fillScreen(TFT_BLACK);
             tft.setRotation(0);
             tft.setTextDatum(MC_DATUM);
@@ -155,9 +143,16 @@ void update_screen_state()
             tft.setTextSize(2);
             tft.drawString("WELCOME",120,150,1);
             break;
-        case SCREEN_STATE_NO_CONNECTION:
+        case SCREEN_STATE_NOCONN_ACTIVE:
             tft.setTextSize(4);
             tft.setTextColor(TFT_PINK, TFT_BLACK, true);
+            tft.drawSmoothArc(120, 120, 115, 100, 60, 300, TFT_PINK, TFT_BLACK, false);
+            tft.setTextPadding(180);
+            tft.drawString(Lost, x, 195);
+            break;
+        case SCREEN_STATE_NOCONN_CLEAR:
+            tft.setTextSize(4);
+            tft.setTextColor(TFT_BLUE, TFT_BLACK, true);
             tft.drawSmoothArc(120, 120, 115, 100, 60, 300, TFT_PINK, TFT_BLACK, false);
             tft.setTextPadding(180);
             tft.drawString(Lost, x, 195);
@@ -205,7 +200,14 @@ void callback(char* topic, byte* payload, unsigned int length)
             update_estop_state(ESTOP_STATE_REMOTE);
         }
         else
- 
+        {
+            update_estop_state(ESTOP_STATE_CLEAR);
+        }
+    }
+}
+
+void reconnect()
+{
     static unsigned long lastRetry = 0;
     unsigned long currentMillis = millis();
 
@@ -224,14 +226,7 @@ void callback(char* topic, byte* payload, unsigned int length)
             Serial.println(client.state());
         }
     }
-    lastRetry = currentMillis;   }
-        else
-        {
-            Serial.print("Failed to connect, state: ");
-            Serial.println(client.state());
-            delay(2000);
-        }
-    }
+    lastRetry = currentMillis;
 }
 
 bool isDefaultIPAddress(IPAddress ip)
@@ -242,61 +237,64 @@ bool isDefaultIPAddress(IPAddress ip)
 
 void loop()
 {
-    bool buttonPressed = false; // Flag to track button state
     static bool init=false;
+  
     if (!init)
     {
 #ifdef MQTT_SERVER
         Serial.println("Connecting To:" MQTT_SERVER);
         client.setServer(MQTT_SERVER, mqtt_port);
-#else
-    if (!client.connected())
-    {
-        reconnect();
+    #else
+        if (isDefaultIPAddress(ETH.gatewayIP())) return;
+        Serial.println("Connecting To:" + ETH.gatewayIP().toString());
+        client.setServer(ETH.gatewayIP(), mqtt_port);
+    #endif
+        client.setCallback(callback);
+        init=true;
     }
-    client.loop();
-
-    String mac = WiFi.macAddress();
 
     int buttonState = digitalRead(buttonPin);
-    i
+    if (buttonState == LOW)
+    {
+        update_estop_state(ESTOP_STATE_LOCAL);
+    }
+    else
+    {
+        update_estop_state(ESTOP_STATE_CLEAR);
+    }
 
     if (!client.connected())
     {
         reconnect();
     }
 
-    if (client.connected)
+    if (client.connected())
     {
         client.loop();
 
-        String mac = WiFi.macAddress();f (buttonState == LOW)
-    {
-            update_estop_state(ESTOP_STATE_LOCAL);
-        }
-    else
+        String mac = WiFi.macAddress();
+
+        // Send MAC address every second
+        unsigned long currentMillis = millis();
+
+        // Send button state message every 100 milliseconds
+        static unsigned long lastButtonMsgTime = 0;
+        if (currentMillis - lastButtonMsgTime >= 100)
         {
-            update_estop_state(ESTOP_STATE_CLEAR);
-        }
-                    end MAC address every second
-            gned long currentMillis = millis();
-                                button state message every 100 milliseconds
-            ic unsigned long lastButtonMsgTime = 0;
-            currentMillis - lastButtonMsgTime >= 100)
-                                ng message = mac;
+            String message = mac;
             if (buttonState == LOW) {
-            // Button is pressed
+                // Button is pressed
                 message += ",1";         
             } 
-        else {
+            else {
                 // Button is released
-         
-    }       message += ",0";             
+                message += ",0";             
+            }
+
+            client.publish(estop_topic, message.c_str());
+            Serial.println(message.c_str());
+
+            lastButtonMsgTime = currentMillis;
         }
-
-        client.publish(estop_topic, message.c_str());
-        Serial.println(message.c_str());
-
-        lastButtonMsgTime = currentMillis;
     }
 }
