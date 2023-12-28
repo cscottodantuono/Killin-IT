@@ -37,6 +37,7 @@
 TFT_eSPI    tft = TFT_eSPI();         // Declare object "tft"
 
 TFT_eSprite spr = TFT_eSprite(&tft);  // Declare Sprite object "spr" with pointer to "tft" object
+TFT_eSprite clear = TFT_eSprite(&tft);
 
 void setup()
 {
@@ -51,9 +52,26 @@ void setup()
 
   // Create a sprite of defined size
   spr.createSprite(WIDTH, HEIGHT);
+  
 
   // Clear the TFT screen to blue
   tft.fillScreen(TFT_BLUE);
+
+    clear.createSprite(240, 240);
+    clear.fillSprite(TFT_BLUE);
+    clear.setTextSize(4);
+    clear.setTextColor(TFT_GREEN, TFT_BLACK, true);
+    clear.drawSmoothArc(120, 120, 110, 100, 60, 300, TFT_GREEN, TFT_TRANSPARENT, false);
+    clear.setTextPadding(180);
+    clear.drawString("Clear", 120, 195);
+    clear.setTextDatum(MC_DATUM);
+    clear.setTextColor(TFT_WHITE, TFT_TRANSPARENT,true);
+    clear.setTextSize(3);
+    clear.drawString("KILLIN'-IT",120,120);
+    clear.setTextSize(2);
+    clear.drawString("ESTOP SYSTEM",120,150);
+    clear.pushSprite(0,0);
+    delay(10000);
 }
 
 void loop(void)
