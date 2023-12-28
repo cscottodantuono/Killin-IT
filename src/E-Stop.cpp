@@ -3,7 +3,8 @@
 #include "PubSubClient.h"
 #include "TFT_eSPI.h"
 
-enum screen_state_t {
+enum screen_state_t 
+{
   SCREEN_STATE_INIT = -1,
   SCREEN_STATE_BOOT,
   SCREEN_STATE_NOCONN_CLEAR,
@@ -56,9 +57,11 @@ String Standby = "STANDBY";
 String Lost = "NO CONN";
 String Model = "KILLIN'-IT";
 String Series = "E-STOP SYSTEM";
-int ActiveColor = TFT_RED;
 int NoConnActiveColor = TFT_ORANGE;
-
+int NoConnClearColor = TFT_ORANGE;
+int ClearColor = TFT_ORANGE;
+int ActiveColor = TFT_RED;
+int StandbyColor = TFT_ORANGE;
 int ArcOD = 120;
 int ArcID = 100;
 int StartAng = 60;
@@ -184,22 +187,22 @@ void update_screen_state(enum screen_state_t screenState)
             break;
         case SCREEN_STATE_NOCONN_CLEAR:
             tft.setTextSize(4);
-            tft.setTextColor(TFT_BLUE, TFT_BLACK, true);
-            tft.drawSmoothArc(x, y, ArcOD, ArcID, StartAng, EndAng, TFT_BLUE, TFT_BLACK, true);
+            tft.setTextColor(NoConnClearColor, TFT_BLACK, true);
+            tft.drawSmoothArc(x, y, ArcOD, ArcID, StartAng, EndAng, NoConnClearColor, TFT_BLACK, true);
             tft.setTextPadding(TextPad);
             tft.drawString(Lost, x, 195);
             break;
         case SCREEN_STATE_STANDBY:
             tft.setTextSize(4);
-            tft.setTextColor(TFT_YELLOW, TFT_BLACK, true);
-            tft.drawSmoothArc(x, y, ArcOD, ArcID, StartAng, EndAng, TFT_YELLOW, TFT_BLACK, true);
+            tft.setTextColor(StandbyColor, TFT_BLACK, true);
+            tft.drawSmoothArc(x, y, ArcOD, ArcID, StartAng, EndAng, StandbyColor, TFT_BLACK, true);
             tft.setTextPadding(TextPad);
             tft.drawString(Standby, x, 195);
             break;
         case SCREEN_STATE_CLEAR:
             tft.setTextSize(4);
-            tft.setTextColor(TFT_GREEN, TFT_BLACK, true);
-            tft.drawSmoothArc(x, y, ArcOD, ArcID, StartAng, EndAng, TFT_GREEN, TFT_BLACK, true);
+            tft.setTextColor(ClearColor, TFT_BLACK, true);
+            tft.drawSmoothArc(x, y, ArcOD, ArcID, StartAng, EndAng, ClearColor, TFT_BLACK, true);
             tft.setTextPadding(TextPad);
             tft.drawString(Clear, x, 195);
             break;
