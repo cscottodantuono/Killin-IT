@@ -165,35 +165,35 @@ void update_screen_state(enum screen_state_t screenState)
         case SCREEN_STATE_NOCONN_ACTIVE:
             tft.setTextSize(4);
             tft.setTextColor(TFT_PINK, TFT_BLACK, true);
-            tft.drawSmoothArc(120, 120, 115, 100, 60, 300, TFT_PINK, TFT_BLACK, false);
+            tft.drawSmoothArc(120, 120, 115, 100, 60, 300, TFT_PINK, TFT_BLACK, true);
             tft.setTextPadding(180);
             tft.drawString(Lost, x, 195);
             break;
         case SCREEN_STATE_NOCONN_CLEAR:
             tft.setTextSize(4);
             tft.setTextColor(TFT_BLUE, TFT_BLACK, true);
-            tft.drawSmoothArc(120, 120, 115, 100, 60, 300, TFT_BLUE, TFT_BLACK, false);
+            tft.drawSmoothArc(120, 120, 115, 100, 60, 300, TFT_BLUE, TFT_BLACK, true);
             tft.setTextPadding(180);
             tft.drawString(Lost, x, 195);
             break;
         case SCREEN_STATE_STANDBY:
             tft.setTextSize(4);
             tft.setTextColor(TFT_YELLOW, TFT_BLACK, true);
-            tft.drawSmoothArc(120, 120, 115, 100, 60, 300, TFT_YELLOW, TFT_BLACK, false);
+            tft.drawSmoothArc(120, 120, 115, 100, 60, 300, TFT_YELLOW, TFT_BLACK, true);
             tft.setTextPadding(180);
             tft.drawString(Standby, x, 195);
             break;
         case SCREEN_STATE_CLEAR:
             tft.setTextSize(4);
             tft.setTextColor(TFT_GREEN, TFT_BLACK, true);
-            tft.drawSmoothArc(120, 120, 115, 100, 60, 300, TFT_GREEN, TFT_BLACK, false);
+            tft.drawSmoothArc(120, 120, 115, 100, 60, 300, TFT_GREEN, TFT_BLACK, true);
             tft.setTextPadding(180);
             tft.drawString(Clear, x, 195);
             break;
         case SCREEN_STATE_ACTIVE:
             tft.setTextSize(4);
             tft.setTextColor(TFT_RED, TFT_BLACK, true);
-            tft.drawSmoothArc(120, 120, 115, 100, 60, 300, TFT_RED, TFT_BLACK, false);
+            tft.drawSmoothArc(120, 120, 115, 100, 60, 300, TFT_RED, TFT_BLACK, true);
             tft.setTextPadding(180);
             tft.drawString(Active, x, 195);
             break;    
