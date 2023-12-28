@@ -15,6 +15,7 @@ enum screen_state_t {
 
 enum estop_state_t 
 {
+    ESTOP_STATE_INIT = -1,
     ESTOP_STATE_CLEAR = 0,
     ESTOP_STATE_LOCAL,
     ESTOP_STATE_REMOTE,
@@ -73,7 +74,7 @@ void setup()
 
 void update_estop_state(enum estop_state_t estop_state)
 {
-    static enum estop_state_t prev_estop_state;
+    static enum estop_state_t prev_estop_state = ESTOP_STATE_INIT;
     static bool prev_connection_state = false;
 
     bool connection_state = client.connected();
