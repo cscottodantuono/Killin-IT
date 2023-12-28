@@ -75,8 +75,9 @@ void setup()
 
 void update_estop_state()
 {
-    static enum estop_state_t prev_estop_state = ESTOP_STATE_INIT;
     static bool prev_connection_state = false;
+    static enum estop_state_t prev_estop_state = ESTOP_STATE_INIT;
+    enum estop_state_t estop_state;
 
     int buttonState = digitalRead(buttonPin);
     if (buttonState == LOW)
@@ -280,7 +281,7 @@ void loop()
     {
         reconnect();
     }
-
+    
     if (client.connected())
     {
         client.loop();
@@ -295,6 +296,7 @@ void loop()
         if (currentMillis - lastButtonMsgTime >= 100)
         {
             String message = mac;
+            int buttonState = digitalRead(buttonPin);
             if (buttonState == LOW) {
                 // Button is pressed
                 message += ",1";         
