@@ -168,6 +168,7 @@ void update_screen_state(enum screen_state_t screenState)
             gif.begin();
             if (gif.open((uint8_t *)GIF_IMAGE, sizeof(GIF_IMAGE), GIFDraw))
                 {
+                    tft.setSwapBytes(true);
                     tft.startWrite();
                     while (gif.playFrame(true, NULL))
                     {
