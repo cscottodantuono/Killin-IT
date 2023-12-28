@@ -246,13 +246,17 @@ void loop()
 #ifdef MQTT_SERVER
         Serial.println("Connecting To:" MQTT_SERVER);
         client.setServer(MQTT_SERVER, mqtt_port);
-    #else
-        if (isDefaultIPAddress(ETH.gatewayIP())) break;
-        Serial.println("Connecting To:" + ETH.gatewayIP().toString());
-        client.setServer(ETH.gatewayIP(), mqtt_port);
-    #endif
         client.setCallback(callback);
         init=true;
+#else
+        if (!isDefaultIPAddress(ETH.gatewayIP()))
+        {
+            Serial.println("Connecting To:" + ETH.gatewayIP().toString());
+            client.setServer(ETH.gatewayIP(), mqtt_port);
+            client.setCallback(callback);
+            init=true;
+        }
+#endif
     }
 
     int buttonState = digitalRead(buttonPin);
