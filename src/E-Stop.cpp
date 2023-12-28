@@ -44,6 +44,7 @@ const int relayPin_6 = 16;
 WiFiClient ethClient;
 PubSubClient client(ethClient);
 int lastButtonState = HIGH;
+bool remoteEstop = false;
 bool messageSent = false;
 unsigned long lastMacSendTime = 0;
 
@@ -58,7 +59,7 @@ String Series = "E-STOP SYSTEM";
 int x = tft.width() / 2; // Center of the screen
 int y = tft.height() / 2; // Center of the screen
 
-void update_estop_state(enum estop_state_t estop_state);
+void update_estop_state();
 void update_screen_state(enum screen_state_t screen_state);
 
 void setup()
@@ -72,10 +73,24 @@ void setup()
     update_screen_state(SCREEN_STATE_BOOT);
 }
 
-void update_estop_state(enum estop_state_t estop_state)
+void update_estop_state()
 {
     static enum estop_state_t prev_estop_state = ESTOP_STATE_INIT;
     static bool prev_connection_state = false;
+
+    int buttonState = digitalRead(buttonPin);
+    if (buttonState == LOW)
+    {
+        estop_state = ESTOP_STATE_LOCAL;
+    }
+    else if (remoteEstop)
+    {
+        estop_state = ESTOP_STATE_REMOTE;
+    }
+    else
+    {
+        estop_state = ESTOP_STATE_CLEAR;
+    }
 
     bool connection_state = client.connected();
 
@@ -193,19 +208,16 @@ void callback(char* topic, byte* payload, unsigned int length)
 
     if (String(topic) == relay_control_topic)
     {
-        int buttonState = digitalRead(buttonPin);
-        if (buttonState == LOW)
+        if (message == "on")
         {
-            update_estop_state(ESTOP_STATE_LOCAL);
-        }
-        else if (message == "on")
-        {
-            update_estop_state(ESTOP_STATE_REMOTE);
+            remoteEstop = true;
         }
         else
         {
-            update_estop_state(ESTOP_STATE_CLEAR);
+            remoteEstop = false;
         }
+
+        update_estop_state();
     }
 }
 
@@ -260,16 +272,8 @@ void loop()
 #endif
     }
 
-    int buttonState = digitalRead(buttonPin);
-    if (buttonState == LOW)
-    {
-        update_estop_state(ESTOP_STATE_LOCAL);
-    }
-    else
-    {
-        update_estop_state(ESTOP_STATE_CLEAR);
-    }
-
+    update_estop_state();
+    
     if (!init) return;
 
     if (!client.connected())
