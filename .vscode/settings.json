@@ -1,0 +1,16 @@
+{
+    "files.associations": {
+        "*.cps": "javascript",
+        "*.MMG": "gcode",
+        "*.gm": "gcode",
+        "csd": "cpp",
+        "string": "cpp",
+        ".h": "cpp",
+        ".ino": "cpp",
+        ".cpp": "cpp",
+        ".nc": "gcode",
+        "test": "cpp",
+        "*.h": "cpp",
+        "*.txt": "cpp"
+    }
+}

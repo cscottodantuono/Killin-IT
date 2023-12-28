@@ -4,11 +4,11 @@
 #define GC9A01_DRIVER
 
 //#define TFT_MISO 19
-#define TFT_MOSI 2
-#define TFT_SCLK 14
-#define TFT_CS    5  // Chip select control pin
+#define TFT_MOSI  2
+#define TFT_SCLK  14
+#define TFT_CS    5   // Chip select control pin
 #define TFT_DC    15  // Data Command control pin
-#define TFT_RST   4  // Reset pin (could connect to RST pin)
+#define TFT_RST   4   // Reset pin (could connect to RST pin)
 //#define TFT_RST  -1  // Set TFT_RST to -1 if display RESET is connected to ESP32 board RST
 
 #define LOAD_GLCD   // Font 1. Original Adafruit 8 pixel font needs ~1820 bytes in FLASH
@@ -20,7 +20,7 @@
 #define LOAD_GFXFF  // FreeFonts. Include access to the 48 Adafruit_GFX free fonts FF1 to FF48 and custom fonts
 #define SMOOTH_FONT
 
-#define SPI_FREQUENCY  15000000
+#define SPI_FREQUENCY  40000000
 
 //#define SPI_READ_FREQUENCY  20000000
 
