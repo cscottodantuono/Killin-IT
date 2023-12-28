@@ -56,6 +56,14 @@ String Standby = "STANDBY";
 String Lost = "NO CONN";
 String Model = "KILLIN'-IT";
 String Series = "E-STOP SYSTEM";
+int ActiveColor = TFT_RED;
+int NoConnActiveColor = TFT_ORANGE;
+
+int ArcOD = 120;
+int ArcID = 100;
+int StartAng = 60;
+int EndAng = 300;
+int TextPad = 170;
 int x = tft.width() / 2; // Center of the screen
 int y = tft.height() / 2; // Center of the screen
 
@@ -151,51 +159,55 @@ void update_screen_state(enum screen_state_t screenState)
             tft.setTextDatum(MC_DATUM);
             tft.setTextColor(TFT_WHITE, TFT_BLACK,true);
             tft.setTextSize(3);
-            tft.drawString(Model,120,120,1);
-            tft.setTextSize(2);
-            tft.drawString(Series,120,150,1);
-            break;
-        case SCREEN_STATE_BOOT:
-            tft.setTextColor(TFT_DARKCYAN, TFT_BLACK,true);
+            tft.drawString("STRICTLY FX",120,80,1);
             tft.setTextSize(3);
             tft.drawString(Model,120,120,1);
+            tft.setTextSize(1);
+            tft.drawString("CSD Design",120,200,1);
+            break;
+        case SCREEN_STATE_BOOT:
+            tft.fillScreen(TFT_BLACK);
+            delay(100);
+            tft.setTextColor(TFT_CYAN, TFT_BLACK,true);
+            tft.setTextSize(3);
+            tft.drawString(Model,120,100,1);
             tft.setTextSize(2);
-            tft.setTextPadding(180);
-            tft.drawString("WELCOME",120,150,1);
+            tft.setTextPadding(TextPad);
+            tft.drawString(Series,120,130,1);
             break;
         case SCREEN_STATE_NOCONN_ACTIVE:
             tft.setTextSize(4);
-            tft.setTextColor(TFT_PINK, TFT_BLACK, true);
-            tft.drawSmoothArc(120, 120, 115, 100, 60, 300, TFT_PINK, TFT_BLACK, true);
-            tft.setTextPadding(180);
+            tft.setTextColor(NoConnActiveColor, TFT_BLACK, true);
+            tft.drawSmoothArc(x, y, ArcOD, ArcID, StartAng, EndAng, NoConnActiveColor, TFT_BLACK, true);
+            tft.setTextPadding(TextPad);
             tft.drawString(Lost, x, 195);
             break;
         case SCREEN_STATE_NOCONN_CLEAR:
             tft.setTextSize(4);
             tft.setTextColor(TFT_BLUE, TFT_BLACK, true);
-            tft.drawSmoothArc(120, 120, 115, 100, 60, 300, TFT_BLUE, TFT_BLACK, true);
-            tft.setTextPadding(180);
+            tft.drawSmoothArc(x, y, ArcOD, ArcID, StartAng, EndAng, TFT_BLUE, TFT_BLACK, true);
+            tft.setTextPadding(TextPad);
             tft.drawString(Lost, x, 195);
             break;
         case SCREEN_STATE_STANDBY:
             tft.setTextSize(4);
             tft.setTextColor(TFT_YELLOW, TFT_BLACK, true);
-            tft.drawSmoothArc(120, 120, 115, 100, 60, 300, TFT_YELLOW, TFT_BLACK, true);
-            tft.setTextPadding(180);
+            tft.drawSmoothArc(x, y, ArcOD, ArcID, StartAng, EndAng, TFT_YELLOW, TFT_BLACK, true);
+            tft.setTextPadding(TextPad);
             tft.drawString(Standby, x, 195);
             break;
         case SCREEN_STATE_CLEAR:
             tft.setTextSize(4);
             tft.setTextColor(TFT_GREEN, TFT_BLACK, true);
-            tft.drawSmoothArc(120, 120, 115, 100, 60, 300, TFT_GREEN, TFT_BLACK, true);
-            tft.setTextPadding(180);
+            tft.drawSmoothArc(x, y, ArcOD, ArcID, StartAng, EndAng, TFT_GREEN, TFT_BLACK, true);
+            tft.setTextPadding(TextPad);
             tft.drawString(Clear, x, 195);
             break;
         case SCREEN_STATE_ACTIVE:
             tft.setTextSize(4);
-            tft.setTextColor(TFT_RED, TFT_BLACK, true);
-            tft.drawSmoothArc(120, 120, 115, 100, 60, 300, TFT_RED, TFT_BLACK, true);
-            tft.setTextPadding(180);
+            tft.setTextColor(ActiveColor, TFT_BLACK, true);
+            tft.drawSmoothArc(x, y, ArcOD, ArcID, StartAng, EndAng, ActiveColor, TFT_BLACK, true);
+            tft.setTextPadding(TextPad);
             tft.drawString(Active, x, 195);
             break;    
     }
