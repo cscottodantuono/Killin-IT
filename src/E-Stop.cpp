@@ -3,6 +3,12 @@
 #include "PubSubClient.h"
 #include "TFT_eSPI.h"
 
+#include "AnimatedGIF.h"
+#include "SFX_GIF.h"
+#include "GIFDraw.h"
+AnimatedGIF gif;
+#define GIF_IMAGE SFX_GIF
+
 enum screen_state_t 
 {
   SCREEN_STATE_INIT = -1,
@@ -50,7 +56,7 @@ bool messageSent = false;
 unsigned long lastMacSendTime = 0;
 
 // TFT Things
-TFT_eSPI tft = TFT_eSPI();
+// TFT_eSPI tft = TFT_eSPI();
 String Active = "ACTIVE";
 String Clear = "CLEAR";
 String Standby = "STANDBY";
@@ -58,10 +64,10 @@ String Lost = "NO CONN";
 String Model = "KILLIN'-IT";
 String Series = "E-STOP SYSTEM";
 int NoConnActiveColor = TFT_ORANGE;
-int NoConnClearColor = TFT_ORANGE;
-int ClearColor = TFT_ORANGE;
+int NoConnClearColor = TFT_BLUE;
+int ClearColor = TFT_GREEN;
 int ActiveColor = TFT_RED;
-int StandbyColor = TFT_ORANGE;
+int StandbyColor = TFT_YELLOW;
 int ArcOD = 120;
 int ArcID = 100;
 int StartAng = 60;
@@ -81,7 +87,7 @@ void setup()
     pinMode(buttonPin, INPUT_PULLUP);
     pinMode(relayPin_1, OUTPUT);
     digitalWrite(relayPin_1, LOW);
-    update_screen_state(SCREEN_STATE_BOOT);
+    update_screen_state(SCREEN_STATE_BOOT);   
 }
 
 void update_estop_state()
@@ -156,14 +162,26 @@ void update_screen_state(enum screen_state_t screenState)
     {
         case SCREEN_STATE_INIT:
             tft.init();
-            //tft.setFreeFont(&FreeMono12pt7b);
+            //tft.setFreeFont(&FreeMonoBold12pt7b);
             tft.fillScreen(TFT_BLACK);
             tft.setRotation(0);
+            gif.begin();
+            if (gif.open((uint8_t *)GIF_IMAGE, sizeof(GIF_IMAGE), GIFDraw))
+                {
+                    tft.startWrite();
+                    while (gif.playFrame(true, NULL))
+                    {
+                    yield();
+                    }
+                    gif.close();
+                    tft.endWrite(); 
+                }
+            //delay(10000);
             tft.setTextDatum(MC_DATUM);
             tft.setTextColor(TFT_WHITE, TFT_BLACK,true);
             tft.setTextSize(3);
             tft.drawString("STRICTLY FX",120,80,1);
-            tft.setTextSize(3);
+            tft.setTextSize(2);
             tft.drawString(Model,120,120,1);
             tft.setTextSize(1);
             tft.drawString("CSD Design",120,200,1);
