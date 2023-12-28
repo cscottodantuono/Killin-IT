@@ -227,8 +227,8 @@ void reconnect()
             Serial.print("Failed to connect, state: ");
             Serial.println(client.state());
         }
+        lastRetry = currentMillis;
     }
-    lastRetry = currentMillis;
 }
 
 bool isDefaultIPAddress(IPAddress ip)
