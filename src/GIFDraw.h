@@ -9,7 +9,7 @@ TFT_eSPI tft = TFT_eSPI();
 #define DISPLAY_WIDTH  tft.width()
 #define DISPLAY_HEIGHT tft.height()
 #define BUFFER_SIZE 500            // Optimum is >= GIF width or integral division of width
-#define USE_DMA
+//#define USE_DMA
 
 #ifdef USE_DMA
   uint16_t usTemp[2][BUFFER_SIZE]; // Global to support DMA use
