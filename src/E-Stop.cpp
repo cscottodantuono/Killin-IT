@@ -178,6 +178,7 @@ void update_screen_state(enum screen_state_t screenState)
                     tft.endWrite(); 
                 }
             tft.fillScreen(TFT_BLACK);
+            delay(100);
             tft.setTextDatum(MC_DATUM);
             tft.setTextColor(TFT_WHITE, TFT_BLACK,true);
             tft.setTextSize(3);
