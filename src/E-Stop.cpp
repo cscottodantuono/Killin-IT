@@ -2,6 +2,9 @@
 #include <ETH.h>
 #include "PubSubClient.h"
 #include "TFT_eSPI.h"
+#include "lvgl.h"
+#include "ui.h"
+#include "ui_helpers.h"
 
 #include "AnimatedGIF.h"
 #include "SFX_GIF.h"
@@ -86,49 +89,6 @@ TFT_eSprite active_s = TFT_eSprite(&tft);
 TFT_eSprite standby_s = TFT_eSprite(&tft);
 TFT_eSprite clear_s = TFT_eSprite(&tft);
 
-void start_sprite()
-{
-    start_s.createSprite(240, 240);
-    start_s.fillSprite(TFT_BLUE);
-    start_s.setTextDatum(MC_DATUM);
-    start_s.setTextColor(TFT_WHITE, TFT_BLACK, true);
-    start_s.setTextSize(3);
-    start_s.drawString("STRICTLY FX", 120, 80, 1);
-    start_s.setTextSize(2);
-    start_s.drawString(Model, 120, 120, 1);
-    start_s.setTextSize(1);
-    start_s.drawString("CSD Design", 120, 200, 1);
-}
-
-void boot_sprite()
-{
-    boot_s.createSprite(240, 240);
-}
-
-void noconn_active_sprite()
-{
-    noconn_a_s.createSprite(240, 240);
-}
-
-void noconn_clear_sprite()
-{
-    noconn_c_s.createSprite(240, 240);
-}
-
-void active_sprite()
-{
-    active_s.createSprite(240, 240);
-}
-
-void standby_sprite()
-{
-    standby_s.createSprite(240, 240);
-}
-
-void clear_sprite()
-{
-    clear_s.createSprite(240, 240);
-}
 
 void update_estop_state();
 void update_screen_state(enum screen_state_t screen_state);
