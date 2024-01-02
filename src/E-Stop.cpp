@@ -88,7 +88,7 @@ TFT_eSprite clear_s = TFT_eSprite(&tft);
 
 void start_sprite()
 {
-    start_s.createSprite(240, 240);
+    start_s.createSprite(23, 23);
     start_s.fillSprite(TFT_BLUE);
     start_s.setTextDatum(MC_DATUM);
     start_s.setTextColor(TFT_WHITE, TFT_BLACK, true);
@@ -98,6 +98,7 @@ void start_sprite()
     start_s.drawString(Model, 120, 120, 1);
     start_s.setTextSize(1);
     start_s.drawString("CSD Design", 120, 200, 1);
+    start_s.pushSprite(100,100);
 }
 
 void boot_sprite()
