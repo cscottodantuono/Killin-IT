@@ -5,16 +5,13 @@
 #include "AnimatedGIF.h"
 #include "SFX_GIF.h"
 #include "GIFDraw.h"
-#include "AkiraExtended_26.h" //CSD_FONTS!!!
-#include "Designer_24.h" //CSD_FONTS!!!
-#include "Designer_38.h" //CSD_FONTS!!!
-#include "Quicksilver_40.h" //CSD_FONTS!!!
+#include "AkiraExtended_26.h"   //CSD_FONTS!!!
+#include "Designer_24.h"        //CSD_FONTS!!!
+#include "Designer_38.h"        //CSD_FONTS!!!
+#include "Quicksilver_40.h"     //CSD_FONTS!!!
 AnimatedGIF gif;
 #define GIF_IMAGE SFX_GIF
 #define USE_DMA
-// #define AKIRA_26 &AkiraExtended26 //CSD_FONTS!!!
-// #define DESIGNER_24 &Designer24 //CSD_FONTS!!!
-// #define DESIGNER_38 &Designer38 //CSD_FONTS!!!
 
 enum screen_state_t
 {
@@ -174,7 +171,7 @@ void update_estop_state()
     enum estop_state_t estop_state;
 
     int buttonState = digitalRead(buttonPin);
-    if (buttonState == LOW)
+    if (buttonState == HIGH)
     {
         estop_state = ESTOP_STATE_LOCAL;
     }
@@ -192,11 +189,11 @@ void update_estop_state()
     /* Always use current state immediately for the actual relay control */
     if (estop_state)
     {
-        digitalWrite(relayPin_1, HIGH);
+        digitalWrite(relayPin_1, LOW);
     }
     else
     {
-        digitalWrite(relayPin_1, LOW);
+        digitalWrite(relayPin_1, HIGH);
     }
 
     if (estop_state != prev_estop_state || connection_state != prev_connection_state)
@@ -241,7 +238,7 @@ void update_screen_state(enum screen_state_t screenState)
         tft.init();
         tft.fillScreen(TFT_BLACK);
         tft.setRotation(0);
-        // play_gif();
+        play_gif();
 
         tft.fillScreen(TFT_BLACK);
         tft.setTextDatum(MC_DATUM);
@@ -482,7 +479,7 @@ void loop()
         {
             String message = mac;
             int buttonState = digitalRead(buttonPin);
-            if (buttonState == LOW)
+            if (buttonState == HIGH)
             {
                 // Button is pressed
                 message += ",1";
