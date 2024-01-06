@@ -58,6 +58,7 @@ int lastButtonState = HIGH;
 bool remoteEstop = false;
 bool messageSent = false;
 unsigned long lastMacSendTime = 0;
+bool Text_BG_Fill = false;
 
 // TFT Things
 // TFT_eSPI tft = TFT_eSPI();
@@ -81,58 +82,58 @@ int x = tft.width() / 2;  // Center of the screen
 int y = tft.height() / 2; // Center of the screen
 
 // Sprite Creation
-TFT_eSprite start_s = TFT_eSprite(&tft);
-TFT_eSprite boot_s = TFT_eSprite(&tft);
-TFT_eSprite noconn_a_s = TFT_eSprite(&tft);
-TFT_eSprite noconn_c_s = TFT_eSprite(&tft);
-TFT_eSprite active_s = TFT_eSprite(&tft);
-TFT_eSprite standby_s = TFT_eSprite(&tft);
-TFT_eSprite clear_s = TFT_eSprite(&tft);
+// TFT_eSprite start_s = TFT_eSprite(&tft);
+// TFT_eSprite boot_s = TFT_eSprite(&tft);
+// TFT_eSprite noconn_a_s = TFT_eSprite(&tft);
+// TFT_eSprite noconn_c_s = TFT_eSprite(&tft);
+// TFT_eSprite active_s = TFT_eSprite(&tft);
+// TFT_eSprite standby_s = TFT_eSprite(&tft);
+// TFT_eSprite clear_s = TFT_eSprite(&tft);
 
-void start_sprite()
-{
-    start_s.createSprite(23, 23);
-    // start_s.fillSprite(TFT_BLUE);
-    // start_s.setTextDatum(MC_DATUM);
-    // start_s.setTextColor(TFT_WHITE, TFT_BLACK, true);
-    // start_s.setTextSize(3);
-    // start_s.drawString("STRICTLY FX", 120, 80, 1);
-    // start_s.setTextSize(2);
-    // start_s.drawString(Model, 120, 120, 1);
-    // start_s.setTextSize(1);
-    // start_s.drawString("CSD Design", 120, 200, 1);
-    // start_s.pushSprite(100,100);
-}
+// void start_sprite()
+// {
+//     start_s.createSprite(240, 240);
+//     // start_s.fillSprite(TFT_BLUE);
+//     // start_s.setTextDatum(MC_DATUM);
+//     // start_s.setTextColor(TFT_WHITE, TFT_BLACK, true);
+//     // start_s.setTextSize(3);
+//     // start_s.drawString("STRICTLY FX", 120, 80, 1);
+//     // start_s.setTextSize(2);
+//     // start_s.drawString(Model, 120, 120, 1);
+//     // start_s.setTextSize(1);
+//     // start_s.drawString("CSD Design", 120, 200, 1);
+//     // start_s.pushSprite(100,100);
+// }
 
-void boot_sprite()
-{
-    boot_s.createSprite(240, 240);
-}
+// void boot_sprite()
+// {
+//     boot_s.createSprite(240, 240);
+// }
 
-void noconn_active_sprite()
-{
-    noconn_a_s.createSprite(240, 240);
-}
+// void noconn_active_sprite()
+// {
+//     noconn_a_s.createSprite(240, 240);
+// }
 
-void noconn_clear_sprite()
-{
-    noconn_c_s.createSprite(240, 240);
-}
+// void noconn_clear_sprite()
+// {
+//     noconn_c_s.createSprite(240, 240);
+// }
 
-void active_sprite()
-{
-    active_s.createSprite(240, 240);
-}
+// void active_sprite()
+// {
+//     active_s.createSprite(240, 240);
+// }
 
-void standby_sprite()
-{
-    standby_s.createSprite(240, 240);
-}
+// void standby_sprite()
+// {
+//     standby_s.createSprite(240, 240);
+// }
 
-void clear_sprite()
-{
-    clear_s.createSprite(240, 240);
-}
+// void clear_sprite()
+// {
+//     clear_s.createSprite(240, 240);
+// }
 
 void update_estop_state();
 void update_screen_state(enum screen_state_t screen_state);
@@ -238,25 +239,26 @@ void update_screen_state(enum screen_state_t screenState)
         tft.init();
         tft.fillScreen(TFT_BLACK);
         tft.setRotation(0);
-        // play_gif();
 
+        play_gif();
+        // tft.setTextPadding(TextPad);
         tft.fillScreen(TFT_BLACK);
         tft.setTextDatum(MC_DATUM);
-        tft.setTextColor(TFT_WHITE, TFT_BLACK, false);
+        tft.setTextColor(TFT_WHITE, TFT_BLACK, true);
         tft.loadFont(Designer24); // CSD_Fonts!!!
         tft.drawString("STRICTLY FX", 120, 80, 1);
         tft.loadFont(Quicksilver40); // CSD_Fonts!!!
         tft.drawString(Model, 120, 140, 1);
         tft.unloadFont();
-        tft.setTextColor(TFT_WHITE, TFT_BLACK, false);
+        tft.setTextColor(TFT_WHITE, TFT_BLACK, true);
         tft.setTextSize(1);
         tft.drawString("CSD Design", 120, 230, 1);
         break;
     case SCREEN_STATE_BOOT:
         tft.fillScreen(TFT_BLACK);
-        delay(100);
-
-        tft.setTextColor(TFT_WHITE, TFT_BLACK, false);
+        // delay(100);
+        // tft.setTextPadding(TextPad);
+        tft.setTextColor(TFT_WHITE, TFT_BLACK, true);
         tft.loadFont(Quicksilver40); // CSD_Fonts!!!
         tft.drawString(Model, x, y-15);
 
@@ -264,15 +266,15 @@ void update_screen_state(enum screen_state_t screenState)
         tft.setTextSize(1);
         tft.drawString(Series, x, y+10);
         tft.unloadFont();
-        tft.setTextColor(TFT_WHITE, TFT_BLACK, false);
+        tft.setTextColor(TFT_WHITE, TFT_BLACK, true);
         tft.setTextSize(1);
         tft.drawString("CSD Design", 120, 230, 1);
 
         break;
     case SCREEN_STATE_NOCONN_ACTIVE:
         tft.fillScreen(TFT_BLACK);
-        delay(100);
-
+        // delay(100);
+        // tft.setTextPadding(TextPad);
         tft.setTextColor(TFT_WHITE, TFT_BLACK, true);
         tft.loadFont(Quicksilver40); // CSD_Fonts!!!
         tft.drawString(Model, x, y-15);
@@ -282,24 +284,24 @@ void update_screen_state(enum screen_state_t screenState)
         tft.drawString(Series, x, y+10);
 
         tft.setTextSize(4);
-        tft.setTextColor(NoConnActiveColor, TFT_BLACK, false);
+        tft.setTextColor(NoConnActiveColor, TFT_BLACK, true);
         tft.drawSmoothArc(x, y, ArcOD, ArcID, StartAng, EndAng, NoConnActiveColor, TFT_BLACK, true);
         tft.loadFont(Designer24); // CSD_Fonts!!!
         tft.drawString("NO", 121, 180);
         tft.drawString("NETWORK", 121, 205);
-        tft.setTextColor(ActiveColor, TFT_BLACK, false);
+        tft.setTextColor(ActiveColor, TFT_BLACK, true);
         tft.loadFont(Designer24); // CSD_Fonts!!!
         tft.drawString(Active, x, y-55);
         tft.unloadFont();
-        tft.setTextColor(TFT_WHITE, TFT_BLACK, false);
+        tft.setTextColor(TFT_WHITE, TFT_BLACK, true);
         tft.setTextSize(1);
         tft.drawString("Strictly FX", 120, 230, 1);
         break;
     case SCREEN_STATE_NOCONN_CLEAR:
         tft.fillScreen(TFT_BLACK);
-        delay(100);
-
-        tft.setTextColor(TFT_WHITE, TFT_BLACK, false);
+        // delay(100);
+        // tft.setTextPadding(TextPad);
+        tft.setTextColor(TFT_WHITE, TFT_BLACK, true);
         tft.loadFont(Quicksilver40); // CSD_Fonts!!!
         tft.drawString(Model, x, y-15);
 
@@ -308,24 +310,24 @@ void update_screen_state(enum screen_state_t screenState)
         tft.drawString(Series, x, y+10);
 
         tft.setTextSize(4);
-        tft.setTextColor(NoConnClearColor, TFT_BLACK, false);
+        tft.setTextColor(NoConnClearColor, TFT_BLACK, true);
         tft.drawSmoothArc(x, y, ArcOD, ArcID, StartAng, EndAng, NoConnClearColor, TFT_BLACK, true);
         tft.loadFont(Designer24); // CSD_Fonts!!!
         tft.drawString("NO", 121, 180);
         tft.drawString("NETWORK", 121, 205);
-        tft.setTextColor(ClearColor, TFT_BLACK, false);
+        tft.setTextColor(ClearColor, TFT_BLACK, true);
         tft.loadFont(Designer24); // CSD_Fonts!!!
         tft.drawString(Clear, x, y-55);
         tft.unloadFont();
-        tft.setTextColor(TFT_WHITE, TFT_BLACK, false);
+        tft.setTextColor(TFT_WHITE, TFT_BLACK, true);
         tft.setTextSize(1);
         tft.drawString("Strictly FX", 120, 230, 1);
         break;
     case SCREEN_STATE_STANDBY:
         tft.fillScreen(TFT_BLACK);
-        delay(100);
-
-        tft.setTextColor(TFT_WHITE, TFT_BLACK, false);
+        // delay(100);
+        // tft.setTextPadding(TextPad);
+        tft.setTextColor(TFT_WHITE, TFT_BLACK, true);
         tft.loadFont(Quicksilver40); // CSD_Fonts!!!
         tft.drawString(Model, x, y-15);
 
@@ -333,20 +335,20 @@ void update_screen_state(enum screen_state_t screenState)
         tft.setTextSize(1);
         tft.drawString(Series, x, y+10);
 
-        tft.setTextColor(StandbyColor, TFT_BLACK, false);
+        tft.setTextColor(StandbyColor, TFT_BLACK, true);
         tft.drawSmoothArc(x, y, ArcOD, ArcID, StartAng, EndAng, StandbyColor, TFT_BLACK, true);
         tft.loadFont(Designer24); // CSD_Fonts!!!
         tft.drawString(Standby, x, y+74);
         tft.unloadFont();
-        tft.setTextColor(TFT_WHITE, TFT_BLACK, false);
+        tft.setTextColor(TFT_WHITE, TFT_BLACK, true);
         tft.setTextSize(1);
         tft.drawString("Strictly FX", 120, 230, 1);
         break;
     case SCREEN_STATE_CLEAR:
         tft.fillScreen(TFT_BLACK);
-        delay(100);
-
-        tft.setTextColor(TFT_WHITE, TFT_BLACK, false);
+        // delay(100);
+        // tft.setTextPadding(TextPad);
+        tft.setTextColor(TFT_WHITE, TFT_BLACK, true);
         tft.loadFont(Quicksilver40); // CSD_Fonts!!!
         tft.drawString(Model, x, y-15);
 
@@ -354,20 +356,20 @@ void update_screen_state(enum screen_state_t screenState)
         tft.setTextSize(1);
         tft.drawString(Series, x, y+10);
 
-        tft.setTextColor(ClearColor, TFT_BLACK, false);
+        tft.setTextColor(ClearColor, TFT_BLACK, true);
         tft.drawSmoothArc(x, y, ArcOD, ArcID, StartAng, EndAng, ClearColor, TFT_BLACK, true);
         tft.loadFont(Designer38); // CSD_Fonts!!!
         tft.drawString(Clear, x, y+80);
         tft.unloadFont();
-        tft.setTextColor(TFT_WHITE, TFT_BLACK, false);
+        tft.setTextColor(TFT_WHITE, TFT_BLACK, true);
         tft.setTextSize(1);
         tft.drawString("Strictly FX", 120, 230, 1);
         break;
     case SCREEN_STATE_ACTIVE:
         tft.fillScreen(TFT_BLACK);
-        delay(100);
-
-        tft.setTextColor(TFT_WHITE, TFT_BLACK, false);
+        // delay(100);
+        // tft.setTextPadding(TextPad);
+        tft.setTextColor(TFT_WHITE, TFT_BLACK, true);
         tft.loadFont(Quicksilver40); // CSD_Fonts!!!
         tft.drawString(Model, x, y-15);
 
@@ -375,12 +377,12 @@ void update_screen_state(enum screen_state_t screenState)
         tft.setTextSize(1);
         tft.drawString(Series, x, y+10);
 
-        tft.setTextColor(ActiveColor, TFT_BLACK, false);
+        tft.setTextColor(ActiveColor, TFT_BLACK, true);
         tft.drawSmoothArc(x, y, ArcOD, ArcID, StartAng, EndAng, ActiveColor, TFT_BLACK, true);
         tft.loadFont(Designer38); // CSD_Fonts!!!
         tft.drawString(Active, x, y+80);
         tft.unloadFont();
-        tft.setTextColor(TFT_WHITE, TFT_BLACK, false);
+        tft.setTextColor(TFT_WHITE, TFT_BLACK, true);
         tft.setTextSize(1);
         tft.drawString("Strictly FX", 120, 230, 1);
         break;
@@ -414,7 +416,7 @@ void reconnect()
     static unsigned long lastRetry = 0;
     unsigned long currentMillis = millis();
 
-    client.setKeepAlive(1);   /// well shit??? KEEP ALIVE IS ALREADY A THING!!!
+    
 
     // Try reconnecting every 2 seconds
     if (currentMillis - lastRetry >= 1000)
@@ -461,6 +463,8 @@ void loop()
         }
 #endif
     }
+
+    client.setKeepAlive(1);   /// well shit??? KEEP ALIVE IS ALREADY A THING!!!
 
     update_estop_state();
 
