@@ -92,16 +92,16 @@ TFT_eSprite clear_s = TFT_eSprite(&tft);
 void start_sprite()
 {
     start_s.createSprite(23, 23);
-    start_s.fillSprite(TFT_BLUE);
-    start_s.setTextDatum(MC_DATUM);
-    start_s.setTextColor(TFT_WHITE, TFT_BLACK, true);
-    start_s.setTextSize(3);
-    start_s.drawString("STRICTLY FX", 120, 80, 1);
-    start_s.setTextSize(2);
-    start_s.drawString(Model, 120, 120, 1);
-    start_s.setTextSize(1);
-    start_s.drawString("CSD Design", 120, 200, 1);
-    start_s.pushSprite(100,100);
+    // start_s.fillSprite(TFT_BLUE);
+    // start_s.setTextDatum(MC_DATUM);
+    // start_s.setTextColor(TFT_WHITE, TFT_BLACK, true);
+    // start_s.setTextSize(3);
+    // start_s.drawString("STRICTLY FX", 120, 80, 1);
+    // start_s.setTextSize(2);
+    // start_s.drawString(Model, 120, 120, 1);
+    // start_s.setTextSize(1);
+    // start_s.drawString("CSD Design", 120, 200, 1);
+    // start_s.pushSprite(100,100);
 }
 
 void boot_sprite()
@@ -238,7 +238,7 @@ void update_screen_state(enum screen_state_t screenState)
         tft.init();
         tft.fillScreen(TFT_BLACK);
         tft.setRotation(0);
-        play_gif();
+        // play_gif();
 
         tft.fillScreen(TFT_BLACK);
         tft.setTextDatum(MC_DATUM);
@@ -254,6 +254,7 @@ void update_screen_state(enum screen_state_t screenState)
         break;
     case SCREEN_STATE_BOOT:
         tft.fillScreen(TFT_BLACK);
+        delay(100);
 
         tft.setTextColor(TFT_WHITE, TFT_BLACK, false);
         tft.loadFont(Quicksilver40); // CSD_Fonts!!!
@@ -270,6 +271,7 @@ void update_screen_state(enum screen_state_t screenState)
         break;
     case SCREEN_STATE_NOCONN_ACTIVE:
         tft.fillScreen(TFT_BLACK);
+        delay(100);
 
         tft.setTextColor(TFT_WHITE, TFT_BLACK, true);
         tft.loadFont(Quicksilver40); // CSD_Fonts!!!
@@ -295,6 +297,7 @@ void update_screen_state(enum screen_state_t screenState)
         break;
     case SCREEN_STATE_NOCONN_CLEAR:
         tft.fillScreen(TFT_BLACK);
+        delay(100);
 
         tft.setTextColor(TFT_WHITE, TFT_BLACK, false);
         tft.loadFont(Quicksilver40); // CSD_Fonts!!!
@@ -320,6 +323,7 @@ void update_screen_state(enum screen_state_t screenState)
         break;
     case SCREEN_STATE_STANDBY:
         tft.fillScreen(TFT_BLACK);
+        delay(100);
 
         tft.setTextColor(TFT_WHITE, TFT_BLACK, false);
         tft.loadFont(Quicksilver40); // CSD_Fonts!!!
@@ -340,6 +344,7 @@ void update_screen_state(enum screen_state_t screenState)
         break;
     case SCREEN_STATE_CLEAR:
         tft.fillScreen(TFT_BLACK);
+        delay(100);
 
         tft.setTextColor(TFT_WHITE, TFT_BLACK, false);
         tft.loadFont(Quicksilver40); // CSD_Fonts!!!
@@ -360,6 +365,7 @@ void update_screen_state(enum screen_state_t screenState)
         break;
     case SCREEN_STATE_ACTIVE:
         tft.fillScreen(TFT_BLACK);
+        delay(100);
 
         tft.setTextColor(TFT_WHITE, TFT_BLACK, false);
         tft.loadFont(Quicksilver40); // CSD_Fonts!!!
@@ -408,14 +414,16 @@ void reconnect()
     static unsigned long lastRetry = 0;
     unsigned long currentMillis = millis();
 
+    client.setKeepAlive(1);   /// well shit??? KEEP ALIVE IS ALREADY A THING!!!
+
     // Try reconnecting every 2 seconds
-    if (currentMillis - lastRetry >= 2000)
+    if (currentMillis - lastRetry >= 1000)
     {
         String client_id = "esp32-client-" + String(WiFi.macAddress());
         if (client.connect(client_id.c_str(), mqtt_username, mqtt_password))
         {
-            Serial.println("Connected to MQTT broker");
             client.subscribe(relay_control_topic);
+            Serial.println("Connected to MQTT broker");
         }
         else
         {
